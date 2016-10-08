@@ -1,0 +1,89 @@
+<html><head></head><body>(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  
+
+  
+  /* gettext identity library */
+
+  django.gettext = function (msgid) { return msgid; };
+  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.gettext_noop = function (msgid) { return msgid; };
+  django.pgettext = function (context, msgid) { return msgid; };
+  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    &#34;DATETIME_FORMAT&#34;: &#34;N j, Y, P&#34;, 
+    &#34;DATETIME_INPUT_FORMATS&#34;: [
+      &#34;%Y-%m-%d %H:%M:%S&#34;, 
+      &#34;%Y-%m-%d %H:%M:%S.%f&#34;, 
+      &#34;%Y-%m-%d %H:%M&#34;, 
+      &#34;%Y-%m-%d&#34;, 
+      &#34;%m/%d/%Y %H:%M:%S&#34;, 
+      &#34;%m/%d/%Y %H:%M:%S.%f&#34;, 
+      &#34;%m/%d/%Y %H:%M&#34;, 
+      &#34;%m/%d/%Y&#34;, 
+      &#34;%m/%d/%y %H:%M:%S&#34;, 
+      &#34;%m/%d/%y %H:%M:%S.%f&#34;, 
+      &#34;%m/%d/%y %H:%M&#34;, 
+      &#34;%m/%d/%y&#34;
+    ], 
+    &#34;DATE_FORMAT&#34;: &#34;N j, Y&#34;, 
+    &#34;DATE_INPUT_FORMATS&#34;: [
+      &#34;%Y-%m-%d&#34;, 
+      &#34;%m/%d/%Y&#34;, 
+      &#34;%m/%d/%y&#34;
+    ], 
+    &#34;DECIMAL_SEPARATOR&#34;: &#34;.&#34;, 
+    &#34;FIRST_DAY_OF_WEEK&#34;: &#34;0&#34;, 
+    &#34;MONTH_DAY_FORMAT&#34;: &#34;F j&#34;, 
+    &#34;NUMBER_GROUPING&#34;: &#34;3&#34;, 
+    &#34;SHORT_DATETIME_FORMAT&#34;: &#34;m/d/Y P&#34;, 
+    &#34;SHORT_DATE_FORMAT&#34;: &#34;m/d/Y&#34;, 
+    &#34;THOUSAND_SEPARATOR&#34;: &#34;,&#34;, 
+    &#34;TIME_FORMAT&#34;: &#34;P&#34;, 
+    &#34;TIME_INPUT_FORMATS&#34;: [
+      &#34;%H:%M:%S&#34;, 
+      &#34;%H:%M:%S.%f&#34;, 
+      &#34;%H:%M&#34;
+    ], 
+    &#34;YEAR_MONTH_FORMAT&#34;: &#34;F Y&#34;
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == &#39;undefined&#39;) {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
+</body></html>
